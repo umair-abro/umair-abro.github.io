@@ -1,37 +1,40 @@
----
-layout: page
----
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  {%- include head.html -%}
+</head>
+<body>
+  <header class="texture-{{ site.texture.style }}">
+    <div class="container">
+      {%- include nav.html -%}
+    </div>
+    {%- include post_header.html -%}  
+  </header>
+  <main>
+    <div class="container">
+      <div class="post-container">
+          {{ content }}
+      </div>
 
-<h1><b>{{ page.title }}</b></h1>
-
-<p class="post-metadata text-muted">
-  {{ page.date | date_to_long_string }} -  
-  <b>
-  {%- assign words = content | number_of_words -%}
-  {%- if words < 360 -%}
-    less than 1 min read time
-  {%- else -%}
-    {{ words | divided_by: 180 }} mins read time
-  {%- endif -%}
-  </b>
-
-  <br>
-
-  {%- if page.tags != empty -%}
-    Tags: 
-    {% for tag in page.tags %}
-    <a class="text-decoration-none no-underline" href="{{ tag | slugify | prepend:'/blog/tags#' | relative_url }}">
-      <span class="tag badge badge-pill text-primary border border-primary">{{ tag }}</span>
-    </a>
-    {% endfor %}
-  {%- endif -%}
-
-</p>
-
-{{ content }}
-
-{% if page.comments %}
-<div class="pt-5">
-  {% include blog/disqus.html %}
-</div>
-{% endif %}
+        <!-- Configure Disqus -->
+      {%- if site.texture.disqus_shortname -%}
+        <div id="disqus_thread" style="margin-top:25px"></div>
+        <script>
+          var disqus_config = function () {
+            this.page.url = '{{ page.url | absolute_url }}';
+            this.page.identifier = '{{ page.url | absolute_url }}';
+          };
+          (function() {
+            var d = document, s = d.createElement('script');
+            s.src = 'https://{{ site.texture.disqus_shortname }}.disqus.com/embed.js';
+            s.setAttribute('data-timestamp', +new Date());
+            (d.head || d.body).appendChild(s);
+          })();
+        </script>
+        <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+      {%- endif -%}
+    </div>
+  </main>
+  {%- include footer.html -%}
+</body>
+</html>
